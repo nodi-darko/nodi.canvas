@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>nodi.canvas</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="./src/gui/css/main.css">
+</head>
+
+<body>
+    <canvas id = "nodicanvas" class='canvascontainer' width='100%' height='100%'></canvas>
+</body>
+
+<script type = "module">
+    import NodiView from "./src/gui/view.js"
+    import NodiLayer from "./src/gui/layer.js"
+    import NodiGrid from "./src/nodi/grid.js"
+
+    let canvas = document.getElementById("nodicanvas");
+
+    // create view
+    let view = new NodiView(canvas);
+    view.setScale(5)
+    view.setTranslate(window.screen.availWidth / 2, window.screen.availHeight / 2);
+    
+    // add grid
+    let grid = new NodiGrid(12, 0.02)
+   
+    // add custom layer
+    let dataLayer = new NodiLayer();
+    dataLayer.render = function (view) {
+        let ctx = view.ctx;
+        view.ctx.lineWidth = 1;
+        ctx.fillStyle = 'black';
+        ctx.fillText("A", 0, 0);
+        ctx.fillText("B", 12, 0);
+        ctx.fillText("C", 0, 12);
+        ctx.fillText("D", 12, 12);
+    }
+
+    // add custom layer
+    let coverLayer = new NodiLayer();
+    coverLayer.render = function (view) {
+        let ctx = view.ctx;
+        ctx.lineWidth = 1;
+        ctx.fillStyle = 'gray';
+        ctx.beginPath();
+        ctx.fillRect(0, 0, 12, 12);
+        ctx.stroke();
+
+    }
+
+    view.addLayer(grid);
+    view.addLayer(dataLayer);
+    view.addLayer(coverLayer);
+
+
+    // redraw after resize event
+    window.view = view;
+    window.addEventListener("resize", function() { window.view.resize(); } );
+
+
+</script>
+
+</html>
