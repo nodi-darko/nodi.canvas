@@ -7,3 +7,6 @@ Simple html canvas for layered maps
 - Add layer
 - Transform layer
 - Add multiple layers
+
+## Demo
+Order memory [github.io](https://htmlpreview.github.io/?https://github.com/nodi-andy/nodi.canvas/blob/master/index.html)
