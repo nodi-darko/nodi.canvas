@@ -18,6 +18,10 @@ export default class NodiGame extends NodiView {
     setGrid(grid) {
         this.grid = grid;
     }
+
+    addHUD(hud) {
+        this.hud = hud;
+    }
     
     newLayer(name) {
         let layer = new NodiLayer(name);
@@ -28,6 +32,9 @@ export default class NodiGame extends NodiView {
 
     init() {
         this.state = "init";
+        if (this.hud) {
+            this.hud.msgText = "Click on any empty tile to start.";
+        }
         let dataLayer = this.layers["data"];
         dataLayer.d = {};
         dataLayer.datasource = [];
@@ -52,6 +59,7 @@ export default class NodiGame extends NodiView {
 
     start() {
         this.state = "running";
+        this.hud.msgText = "Uncover the tiles with increasing order";
         let data = this.layers["data"].d;
         if (data) {
             for(let id in data) {
@@ -68,8 +76,14 @@ export default class NodiGame extends NodiView {
             this.point++;
             this.lastCell++;
         } else {
-            this.start();
-            this.point--;
+            this.point -= this.lastCell;
+            if (this.point <= 0) {
+                this.level = 1;
+                this.hud.msgText = "Game Over";
+                this.init();
+            } else {
+                this.start();
+            }
         }
 
         if (this.lastCell == this.level + 3) {

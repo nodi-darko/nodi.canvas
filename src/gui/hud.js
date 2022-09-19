@@ -12,6 +12,19 @@ export default class NodiHud extends NodiLayer {
         ctx.font = "20px Arial";
         ctx.fillStyle = 'black';
         ctx.fillText(parseInt(this.game.point), 30, 30);
+
+        if (this.msgText) {
+            ctx.fillText(this.msgText, 300, 30);
+        }
+    }
+
+    showMsg(msg) {
+        this.msgText = msg[0];
+        setTimeout(this.removeText, msg[1], this);
+    }
+
+    removeText(hud) {
+        hud.msgText = undefined;
     }
     
 }

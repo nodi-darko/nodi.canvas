@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html style = "width: 100%; height: 100%; margin: 0; padding: 0;">
 <head>
     <title>nodi.canvas</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" type="text/css" href="./src/gui/css/main.css">
     <script src="./src/core/math.js"></script>
 </head>
 
-<body>
+<body style = "overflow: hidden; width: 100%; height: 100%; margin: 0; padding: 0;">
     <canvas id = "nodicanvas" class='canvascontainer' width='100%' height='100%'></canvas>
 </body>
 
@@ -31,7 +30,7 @@
 
     dataLayer.render = function (view) {
         view.ctx.lineWidth = 1;
-        view.ctx.font = "1px Arial";
+        view.ctx.font = "0.8px Arial";
         view.ctx.fillStyle = 'black';
         let n = 1;
         if (this.d) {

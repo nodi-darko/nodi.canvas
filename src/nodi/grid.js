@@ -38,7 +38,11 @@ export default class NodiGrid extends NodiLayer{
         } else {
             down = this.h;
         }
-
+        view.ctx.shadowColor = 'black';
+        view.ctx.shadowBlur = 20;
+        view.ctx.fillStyle = "rgb(234, 234, 234)";
+        view.ctx.fillRect(left, top, right, down);
+        view.ctx.shadowColor='rgba(0,0,0,0)';
         //console.log("draw grid", grid_area[0]);
         view.ctx.lineWidth = this.lineWidth;
         view.ctx.beginPath();
