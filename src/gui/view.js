@@ -1,12 +1,14 @@
 import Vec2 from "../core/vec2.js";
 import NodiLayer from "../gui/layer.js";
+import NodiHud from "./hud.js";
 
 export default class NodiView extends NodiLayer {
   constructor(canvas) {
     super([10, 0.1]);
-    this.layers = [];
+    super.view = this;
+    this.layers = {};
 
-    this.dragable = true;
+    this.dragable = false;
 
     this.mouseStartCanvas = new Vec2(0, 0);
     this.mouseCurrentCanvas = new Vec2(0, 0);
@@ -19,6 +21,8 @@ export default class NodiView extends NodiLayer {
     this.viewPort = new DOMRect();
 
     this.startRendering();
+    this.center = new Vec2(0, 0);
+    this.zoomPoint = new Vec2(0, 0);
   }
 
   setCanvas(canvas) {
@@ -76,34 +80,39 @@ export default class NodiView extends NodiLayer {
 
   onMouseDown(e) {
     this.extendMouseData(e);
+    let hit = false;
+    for (let layerName in this.layers) {
+      let layer = this.layers[layerName];
 
-    var is_primary = e.isPrimary === undefined || !e.isPrimary;
-    this.mouseStartCanvas = new Vec2(e.canvasX, e.canvasY);
-    this.mouseCurrentCanvas = this.mouseStartCanvas.clone();
-
-    if (this.pointerDown && is_primary) {
-      this.pointerIsDouble = true;
-    } else {
-      this.pointerIsDouble = false;
-    }
-    this.pointerDown = true;
-    this.canvas.focus();
-
-    //left button mouse / single finger
-    if (e.which == 1 && !this.pointerIsDouble && this.dragable) {
-      //console.log("pointerevents: dragging_canvas start");
-      this.draggingCanvas = true;
+      hit = hit || layer.onMouseDown(e);
     }
 
-    this.isMouseDown = true;
+    if (hit == false) {
+      var is_primary = e.isPrimary === undefined || !e.isPrimary;
+      this.mouseStartCanvas = new Vec2(e.canvasX, e.canvasY);
+      this.mouseCurrentCanvas = this.mouseStartCanvas.clone();
 
-    return false;
+      if (this.pointerDown && is_primary) {
+        this.pointerIsDouble = true;
+      } else {
+        this.pointerIsDouble = false;
+      }
+
+      this.pointerDown = true;
+      this.canvas.focus();
+
+      //left button mouse / single finger
+      if (e.which == 1 && !this.pointerIsDouble && this.dragable) {
+        this.draggingCanvas = true;
+      }
+
+      this.isMouseDown = true;
+
+    }
   }
 
   onMouseMove(e) {
-    if (this.layers.length == 0) {
-      return;
-    }
+
     this.extendMouseData(e);
     this.mouseCurrentCanvas.x = e.canvasX;
     this.mouseCurrentCanvas.y = e.canvasY;
@@ -123,46 +132,51 @@ export default class NodiView extends NodiLayer {
   }
 
   onMouseUp(e) {
-    if (this.layers.length == 0) return;
-
-    var isPrimary = e.isPrimary === undefined || e.isPrimary;
-    this.node_mouse_down = null;
-
-    if (!isPrimary) {
-      return false;
-    }
-
+    e.stopPropagation();
+    e.preventDefault();
     this.extendMouseData(e);
     this.mouseCurrentCanvas.x = e.canvasX;
     this.mouseCurrentCanvas.y = e.canvasY;
-
     var delta = this.mouseCurrentCanvas.subtract(this.mouseStartCanvas);
+    let hit = false;
 
-    this.tx += delta.x * this.scale;
-    this.ty += delta.y * this.scale;
-    this.dx = 0;
-    this.dy = 0;
-    this.isMouseDown = false;
-    this.last_click_position = null;
-
-    this.draggingCanvas = false;
-
-    if (isPrimary) {
-      this.pointerDown = false;
-      this.pointerIsDouble = false;
+    for (let layerName in this.layers) {
+      let layer = this.layers[layerName];
+      layer.onMouseUp(e);
+      if (delta.length() < 0.1) layer.onMouseClick(e);
+      hit = hit || layer.onMouseUp(e);
     }
 
-    this.last_mouse = this.mouseCurrentCanvas;
-    e.stopPropagation();
-    e.preventDefault();
+    if (hit == false && this.draggingCanvas) {
+      var isPrimary = e.isPrimary === undefined || e.isPrimary;
+      this.node_mouse_down = null;
+
+      if (!isPrimary) {
+        return false;
+      }
+
+
+      this.tx += delta.x * this.scale;
+      this.ty += delta.y * this.scale;
+      this.dx = 0;
+      this.dy = 0;
+      this.isMouseDown = false;
+      this.last_click_position = null;
+
+      this.draggingCanvas = false;
+
+      if (isPrimary) {
+        this.pointerDown = false;
+        this.pointerIsDouble = false;
+      }
+
+      this.last_mouse = this.mouseCurrentCanvas;
+    }
+
     return false;
   }
 
   onMouseWheel(e) {
-    if (this.layers.length == 0 || !this.dragable) {
-      return;
-    }
-
     var delta = e.wheelDeltaY != null ? e.wheelDeltaY : e.detail * -60;
 
     this.extendMouseData(e);
@@ -175,32 +189,25 @@ export default class NodiView extends NodiLayer {
       scale *= 1 / 1.1;
     }
 
-    this.setScale(scale, [e.clientX, e.clientY]);
+    this.setScale(scale);
+
 
     e.preventDefault();
+    this.focusOn();
     return false;
   }
 
   extendMouseData(e) {
-    var clientX_rel = 0;
-    var clientY_rel = 0;
-
-    if (this.canvas) {
-      var b = this.canvas.getBoundingClientRect();
-      clientX_rel = e.clientX - b.left;
-      clientY_rel = e.clientY - b.top;
-    } else {
-      clientX_rel = e.clientX;
-      clientY_rel = e.clientY;
-    }
-    e.canvasX = clientX_rel / this.scale - this.tx;
-    e.canvasY = clientY_rel / this.scale - this.ty;
+    e.canvasX = (e.clientX - this.tx) / this.scale;
+    e.canvasY = (e.clientY - this.ty) / this.scale;
+    e.gridX = Math.floor(e.canvasX);
+    e.gridY = Math.floor(e.canvasY);
   }
 
   addLayer(newLayer) {
     if (newLayer) {
       newLayer.attachView(this);
-      this.layers.push(newLayer);
+      this.layers[newLayer.name] = newLayer;
     }
 
     // refresh completely
@@ -211,14 +218,26 @@ export default class NodiView extends NodiLayer {
     if (this.canvas?.width == 0 || this.canvas?.height == 0) {
       return;
     }
-    var ctx = this.ctx;
 
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    for (let layer of this.layers) {
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    // transform camera
+    this.ctx.setTransform(
+      this.sx,
+      0,
+      0,
+      this.sy,
+      this.tx + this.dx,
+      this.ty + this.dy
+    );
+    if (this.grid) this.grid.render(this);
+
+    for (let layerName in this.layers) {
+      let layer = this.layers[layerName];
       // transform camera
-      ctx.setTransform(
+      this.ctx.setTransform(
         this.sx,
         0,
         0,
@@ -228,11 +247,13 @@ export default class NodiView extends NodiLayer {
       );
 
       //transform layer
-      ctx.transform(layer.sx, 0, 0, layer.sy, layer.tx, layer.ty);
+      this.ctx.transform(layer.sx, 0, 0, layer.sy, layer.tx, layer.ty);
 
       // draw layer
-      layer.render(this);
+      if (layer.visible) layer.render(this);
     }
+
+    if (this.hud) this.hud.render();
   }
 
   resize(width, height) {
@@ -248,12 +269,40 @@ export default class NodiView extends NodiLayer {
 
     this.canvas.width = width;
     this.canvas.height = height;
+
+   
     this.updateViewPort();
     this.updateViewRect();
+
+    this.focusOn();
+  }
+
+  setScale(s) {
+    super.setScale(s);
+  }
+
+  setTranslate(x, y) {
+    this.tx = x;
+    this.ty = y;
+  }
+
+  focusOn() {
+    let delta = Vec2.multiply(this.center, this.scale);
+    
+    this.tx = (this.viewPort.x + this.viewPort.width / 2) - delta.x;
+    this.ty = (this.viewPort.y + this.viewPort.height / 2) - delta.y;
+  }
+
+  setCenter(x, y) {
+    this.center.x = x;
+    this.center.y = y;
+    this.zoomPoint.x = x;
+    this.zoomPoint.y = y;
   }
 
   updateViewRect() {
-    for (let layer of this.layers) {
+    for (let layerName in this.layers) {
+      let layer = this.layers[layerName];
       layer.updateViewPort();
     }
   }

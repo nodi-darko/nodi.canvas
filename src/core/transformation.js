@@ -17,18 +17,14 @@ export default class Transformation {
     }
 
 
-    convertOffsetToCanvas(pos) {
-        return [
-            (pos[0] + this.tx) * this.scale,
-            (pos[1] + this.ty) * this.scale
-        ];
+    toWorld(pos) {
+        return new Vec2(  (pos.x + this.tx) * this.scale,
+                      (pos.y + this.ty) * this.scale);
     }
 
-    convertCanvasToOffset(pos, out) {
-        out = out || [0, 0];
-        out[0] = pos[0] / this.scale - this.tx;
-        out[1] = pos[1] / this.scale - this.ty;
-        return out;
+    toCanvas(pos) {
+        return new Vec2( this.tx + pos.x / this.scale,
+                         this.ty + pos.y / this.scale);
     }
 
     setTranslate(x, y) {
@@ -50,13 +46,13 @@ export default class Transformation {
         this.scale = value;
 
         if(zooming_center) {
-            var center = this.convertCanvasToOffset(zooming_center);
+            var center = this.toCanvas(zooming_center);
             this.scale = value;
             if (Math.abs(this.scale - 1) < 0.01) {
                 this.scale = 1;
             }
 
-            var new_center = this.convertCanvasToOffset(zooming_center);
+            var new_center = this.toCanvas(zooming_center);
             var delta_offset = new Vec2(new_center[0] - center[0], new_center[1] - center[1]);
 
 

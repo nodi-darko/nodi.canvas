@@ -108,6 +108,8 @@ export default class Vec2 {
         this.x = x; this.y = y;
         return this;
     }
+
+
 }
 
 
@@ -140,10 +142,15 @@ Vec2.dot = function(a, b) {
 Vec2.cross = function(a, b) {
     return a.x * b.y - a.y * b.x;
 };
+
 Vec2.distance = function(a, b) {
     let va, vb;
     if (a instanceof Vec2 == false) va = new Vec2(a[0], a[1]);
     if (b instanceof Vec2 == false) vb = new Vec2(b[0], b[1]);
     let d = va.subtract(vb);
     return Math.sqrt((d[0] * d[0]) + (d[1] * d[1]));
+}
+
+Vec2.getRandom = function(mx, my) {
+    return new Vec2(Math.getRandomInt(mx), Math.getRandomInt(my))
 }

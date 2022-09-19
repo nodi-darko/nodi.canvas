@@ -4,6 +4,7 @@
     <title>nodi.canvas</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="stylesheet" type="text/css" href="./src/gui/css/main.css">
+    <script src="./src/core/math.js"></script>
 </head>
 
 <body>
@@ -11,6 +12,7 @@
 </body>
 
 <script type = "module">
+    import NodiGame from "./src/nodi/game.js"
     import NodiView from "./src/gui/view.js"
     import NodiLayer from "./src/gui/layer.js"
     import NodiGrid from "./src/nodi/grid.js"
@@ -18,46 +20,71 @@
     let canvas = document.getElementById("nodicanvas");
 
     // create view
-    let view = new NodiView(canvas);
-    view.setScale(5)
-    view.setTranslate(window.screen.availWidth / 2, window.screen.availHeight / 2);
-    
-    // add grid
-    let grid = new NodiGrid(12, 0.02)
-   
-    // add custom layer
-    let dataLayer = new NodiLayer();
-    dataLayer.render = function (view) {
-        let ctx = view.ctx;
-        view.ctx.lineWidth = 1;
-        ctx.fillStyle = 'black';
-        ctx.fillText("A", 0, 0);
-        ctx.fillText("B", 12, 0);
-        ctx.fillText("C", 0, 12);
-        ctx.fillText("D", 12, 12);
-    }
+    let game = new NodiGame(canvas);
+    let grid = new NodiGrid("grid", 12, 0.05, 16, 9)
+    game.setGrid(grid);
+    game.setCenter(grid.mid.x, grid.mid.y);
+    game.setScale(60);
 
     // add custom layer
-    let coverLayer = new NodiLayer();
-    coverLayer.render = function (view) {
-        let ctx = view.ctx;
+    let dataLayer = game.newLayer("data");
+
+    dataLayer.render = function (view) {
+        view.ctx.lineWidth = 1;
+        view.ctx.font = "1px Arial";
+        view.ctx.fillStyle = 'black';
+        let n = 1;
+        if (this.d) {
+            for(let item in this.d) {
+                this.fillText(this.d[item].number, this.d[item]);
+            }
+        }
+    }
+  
+    // add custom layer
+    let coverLayer = game.newLayer("cover");
+
+    coverLayer.render = function (game) {
+        let ctx = game.ctx;
         ctx.lineWidth = 1;
         ctx.fillStyle = 'gray';
-        ctx.beginPath();
-        ctx.fillRect(0, 0, 12, 12);
-        ctx.stroke();
-
+        let data = game.layers["data"].d;
+        if (data) {
+            ctx.beginPath();
+            for(let id in data) {
+                let item = data[id];
+                if (item.visible === false) {
+                    ctx.fillRect(item.x, item.y, 1, 1);
+                }
+            }
+            ctx.stroke();
+        }
     }
 
-    view.addLayer(grid);
-    view.addLayer(dataLayer);
-    view.addLayer(coverLayer);
+    coverLayer.onMouseClick = function (e) {
+        if (game.state == "init") {
+            game.start();
+        }
+    }
+    
+    coverLayer.onMouseDown = function (e) {
+        let itemPos = e.gridY * this.view.grid.w + e.gridX;
+        let item = game.layers["data"].d[itemPos];
+        
+        if (item) {
+            game.coverClicked(item);
+            return true;
+        }
+        else return false;
+    }
+
 
 
     // redraw after resize event
-    window.view = view;
+    window.view = game;
     window.addEventListener("resize", function() { window.view.resize(); } );
 
+    game.init();
 
 </script>
 
