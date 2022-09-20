@@ -11,10 +11,11 @@ export default class NodiHud extends NodiLayer {
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.font = "20px Arial";
         ctx.fillStyle = 'black';
-        ctx.fillText(parseInt(this.game.point), 30, 30);
+
+        ctx.fillText("score: " + parseInt(this.game.point), 30, 30);
 
         if (this.msgText) {
-            ctx.fillText(this.msgText, 300, 30);
+            ctx.fillText(this.msgText, (this.game.viewPort.right - ctx.measureText(this.msgText).width) / 2, 30);
         }
     }
 

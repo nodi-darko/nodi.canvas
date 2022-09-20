@@ -30,7 +30,12 @@ export default class NodiGame extends NodiView {
         return layer;
     }
 
-    init() {
+    reset() {
+        this.point = 0;
+        this.level = 1;
+    }
+
+    startNextLevel() {
         this.state = "init";
         if (this.hud) {
             this.hud.msgText = "Click on any empty tile to start.";
@@ -78,9 +83,9 @@ export default class NodiGame extends NodiView {
         } else {
             this.point -= this.lastCell;
             if (this.point <= 0) {
-                this.level = 1;
                 this.hud.msgText = "Game Over";
-                this.init();
+                this.reset();
+                this.startNextLevel();
             } else {
                 this.start();
             }
@@ -88,7 +93,7 @@ export default class NodiGame extends NodiView {
 
         if (this.lastCell == this.level + 3) {
             this.level++;
-            this.init();
+            this.startNextLevel();
         }
     }
 }

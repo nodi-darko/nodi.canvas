@@ -70,4 +70,4 @@ coverLayer.onMouseDown = function (e) {
 window.view = game;
 window.addEventListener("resize", function() { window.view.resize(); } );
 
-game.init();
+game.startNextLevel();
