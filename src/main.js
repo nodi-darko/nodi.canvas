@@ -10,7 +10,7 @@ let game = new NodiGame(canvas);
 let grid = new NodiGrid("grid", 12, 0.05, 16, 9)
 game.setGrid(grid);
 game.setCenter(grid.mid.x, grid.mid.y);
-game.setScale(60);
+game.setScale(30);
 
 // add custom layer
 let dataLayer = game.newLayer("data");
