@@ -62,6 +62,7 @@
       "XRRigidTransform": "readonly",
       "XRMediaBinding": "readonly"
     },
+    "ignorePatterns": ["*.cjs", "nodicanvas.js"],
     "rules": {
       "no-throw-literal": [
         "error"
