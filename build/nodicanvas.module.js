@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /**
             * @license
             * SPDX-License-Identifier: MIT
@@ -453,10 +452,8 @@ class NodiGrid extends NodiLayer {
 		this.lineWidth = lineWidth;
 		this.w = w;
 		this.h = h;
-		this.ratio = this.w / this.h;
 		this.setScale( this.gridSize );
 		this.mid = new Vec2( this.w, this.h ).divide( 2 );
-		this.size = new Vec2( this.w, this.h ).multiply( this.gridSize );
 
 	}
 
@@ -801,15 +798,6 @@ class NodiView extends NodiLayer {
 
 	}
 
-	newLayer( name ) {
-
-		const layer = new NodiLayer( name );
-		layer.game = this;
-		this.addLayer( layer );
-		return layer;
-
-	}
-
 	render() {
 
 		if ( this.canvas?.width == 0 || this.canvas?.height == 0 ) {
@@ -879,7 +867,6 @@ class NodiView extends NodiLayer {
 		this.canvas.width = width;
 		this.canvas.height = height;
 
-		this.focusOn();
 
 		this.updateViewPort();
 		this.updateViewRect();
@@ -932,18 +919,52 @@ class NodiView extends NodiLayer {
 
 }
 
-function getRandomInt( max ) {
-=======
-export { Vec2 } from './core/vec2.js';
-export { Transformation } from './core/transformation.js';
-export { NodiLayer } from './gui/layer.js';
-export { NodiHud } from './gui/hud.js';
-export { NodiGrid } from './gui/grid.js';
-export { NodiScene } from './gui/scene.js';
-export { NodiView } from './gui/view.js';
+class NodiScene extends NodiView {
 
-export function getRandomInt( max ) {
->>>>>>> 937b6c93e5f67675e453d46d2f0841f4ad043ab3
+	constructor( canvas ) {
+
+		super( canvas );
+
+		this.level = 1;
+		this.state = 'init';
+		this.lastCell = 1;
+		this.point = 0;
+
+		super.hud = new NodiHud( this );
+
+	}
+
+	setGrid( grid ) {
+
+		this.grid = grid;
+
+	}
+
+	addHUD( hud ) {
+
+		this.hud = hud;
+
+	}
+
+	newLayer( name ) {
+
+		const layer = new NodiLayer( name );
+		layer.game = this;
+		this.addLayer( layer );
+		return layer;
+
+	}
+
+	reset() {
+
+		this.point = 0;
+		this.level = 1;
+
+	}
+
+}
+
+function getRandomInt( max ) {
 
 	return Math.floor( Math.random() * max );
 
@@ -962,8 +983,5 @@ if ( typeof window !== 'undefined' ) {
 	}
 
 }
-<<<<<<< HEAD
 
-export { NodiGrid, NodiHud, NodiLayer, NodiView, Transformation, Vec2, getRandomInt };
-=======
->>>>>>> 937b6c93e5f67675e453d46d2f0841f4ad043ab3
+export { NodiGrid, NodiHud, NodiLayer, NodiScene, NodiView, Transformation, Vec2, getRandomInt };
