@@ -1,16 +1,13 @@
 {
-  "name": "nodi.canvas",
-  "version": "0.1.0",
+  "name": "beat_the_ape",
+  "version": "1.0.0",
   "description": "Simple html canvas for layered maps",
   "main": "index.html",
-  "type": "module",
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@babel/eslint-parser": "^7.19.1",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/preset-env": "^7.19.3",
-    "@rollup/plugin-babel": "^5.3.1",
-    "@rollup/plugin-node-resolve": "^14.1.0",
     "chalk": "^5.0.1",
     "concurrently": "^7.4.0",
     "eslint": "^8.24.0",
@@ -24,73 +21,9 @@
     "rollup-plugin-visualizer": "^5.8.2",
     "servez": "^1.14.1"
   },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "mdcs",
-      "plugin:compat/recommended"
-    ],
-    "parser": "@babel/eslint-parser",
-    "parserOptions": {
-      "babelOptions": {
-        "configFile": "./utils/build/.babelrc.json"
-      }
-    },
-    "plugins": [
-      "html",
-      "import"
-    ],
-    "settings": {
-      "polyfills": [
-        "WebGL2RenderingContext"
-      ]
-    },
-    "globals": {
-      "__NODICANVAS_DEVTOOLS__": "readonly",
-      "WebGL2ComputeRenderingContext": "readonly",
-      "potpack": "readonly",
-      "fflate": "readonly",
-      "OIMO": "readonly",
-      "Stats": "readonly",
-      "XRWebGLBinding": "readonly",
-      "XRWebGLLayer": "readonly",
-      "GPUShaderStage": "readonly",
-      "GPUBufferUsage": "readonly",
-      "GPUTextureUsage": "readonly",
-      "QUnit": "readonly",
-      "Ammo": "readonly",
-      "XRRigidTransform": "readonly",
-      "XRMediaBinding": "readonly"
-    },
-    "ignorePatterns": ["*.cjs", "nodicanvas.js"],
-    "rules": {
-      "no-throw-literal": [
-        "error"
-      ],
-      "import/extensions": [
-        "error",
-        "always"
-      ],
-      "quotes": [
-        "error",
-        "single"
-      ],
-      "prefer-const": [
-        "error",
-        {
-          "destructuring": "any",
-          "ignoreReadBeforeAssign": false
-        }
-      ]
-    }
-  },
   "scripts": {
     "start": "npm run dev",
-    "test": "npm run lint",
-    "lint": "eslint src --ext js",
-    "test-unit": "npm run unit --prefix test",
-    "build": "rollup -c utils/build/rollup.config.js",
-    "dev": "concurrently --names \"ROLLUP,HTTP\" -c \"bgBlue.bold,bgGreen.bold\" \"rollup -c utils/build/rollup.config.js -w -m inline\" \"servez -p 8080\""
+    "dev": "concurrently --names \"ROLLUP,HTTP\" -c \"bgBlue.bold,bgGreen.bold\" \"servez -p 8080\""
   },
   "repository": {
     "type": "git",
@@ -100,17 +33,6 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/nodi-andy/nodi.canvas/issues"
-  },
-  "jspm": {
-    "files": [
-      "package.json",
-      "LICENSE",
-      "README.md",
-      "build/nodicanvas.js",
-      "build/nodicanvas.min.js",
-      "build/nodicanvas.module.js"
-    ],
-    "directories": {}
   },
   "homepage": "https://github.com/nodi-andy/nodi.canvas#readme"
 }
