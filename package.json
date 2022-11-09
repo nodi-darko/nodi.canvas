@@ -1,6 +1,6 @@
 {
   "name": "nodi.canvas",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Simple html canvas for layered maps",
   "main": "index.html",
   "type": "module",

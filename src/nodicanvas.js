@@ -3,7 +3,6 @@ export { Transformation } from './core/transformation.js';
 export { NodiLayer } from './gui/layer.js';
 export { NodiHud } from './gui/hud.js';
 export { NodiGrid } from './gui/grid.js';
-export { NodiScene } from './gui/scene.js';
 export { NodiView } from './gui/view.js';
 
 export function getRandomInt( max ) {

@@ -272,6 +272,15 @@ class NodiView extends NodiLayer {
 
 	}
 
+	newLayer( name ) {
+
+		const layer = new NodiLayer( name );
+		layer.game = this;
+		this.addLayer( layer );
+		return layer;
+
+	}
+
 	render() {
 
 		if ( this.canvas?.width == 0 || this.canvas?.height == 0 ) {
@@ -279,7 +288,6 @@ class NodiView extends NodiLayer {
 			return;
 
 		}
-
 
 		this.ctx.setTransform( 1, 0, 0, 1, 0, 0 );
 		this.ctx.clearRect( 0, 0, this.canvas.width, this.canvas.height );
@@ -341,6 +349,7 @@ class NodiView extends NodiLayer {
 		this.canvas.width = width;
 		this.canvas.height = height;
 
+		this.focusOn();
 
 		this.updateViewPort();
 		this.updateViewRect();
