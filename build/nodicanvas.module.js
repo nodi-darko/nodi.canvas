@@ -2,6 +2,10 @@
             * @license
             * SPDX-License-Identifier: MIT
             */
+/**
+            * @license
+            * SPDX-License-Identifier: MIT
+            */
 // 2D Vector
 
 class Vec2 {
@@ -379,7 +383,7 @@ class NodiLayer extends Transformation {
 
 	fillText( t, pos ) {
 
-		this.view.ctx.fillText( t, ( pos.x + 0.25 ), ( pos.y + 0.9 ) );
+		this.view.ctx.fillText( t, ( pos.x + 0.5 ), ( pos.y + 0.75 ) );
 
 	}
 
@@ -418,11 +422,11 @@ class NodiHud extends NodiLayer {
 		ctx.font = '20px Arial';
 		ctx.fillStyle = 'black';
 
-		ctx.fillText( 'score: ' + parseInt( this.game.point ), 30, 30 );
+		ctx.fillText( 'score: ' + parseInt( this.game.point ), 100, 30 );
 
 		if ( this.msgText ) {
 
-			ctx.fillText( this.msgText, ( this.game.viewPort.right - ctx.measureText( this.msgText ).width ) / 2, 30 );
+			ctx.fillText( this.msgText, this.game.viewPort.right / 2, 30 );
 
 		}
 
@@ -452,8 +456,10 @@ class NodiGrid extends NodiLayer {
 		this.lineWidth = lineWidth;
 		this.w = w;
 		this.h = h;
+		this.ratio = this.w / this.h;
 		this.setScale( this.gridSize );
 		this.mid = new Vec2( this.w, this.h ).divide( 2 );
+		this.size = new Vec2( this.w, this.h ).multiply( this.gridSize );
 
 	}
 
@@ -798,6 +804,15 @@ class NodiView extends NodiLayer {
 
 	}
 
+	newLayer( name ) {
+
+		const layer = new NodiLayer( name );
+		layer.game = this;
+		this.addLayer( layer );
+		return layer;
+
+	}
+
 	render() {
 
 		if ( this.canvas?.width == 0 || this.canvas?.height == 0 ) {
@@ -867,6 +882,7 @@ class NodiView extends NodiLayer {
 		this.canvas.width = width;
 		this.canvas.height = height;
 
+		this.focusOn();
 
 		this.updateViewPort();
 		this.updateViewRect();
@@ -919,51 +935,6 @@ class NodiView extends NodiLayer {
 
 }
 
-class NodiScene extends NodiView {
-
-	constructor( canvas ) {
-
-		super( canvas );
-
-		this.level = 1;
-		this.state = 'init';
-		this.lastCell = 1;
-		this.point = 0;
-
-		super.hud = new NodiHud( this );
-
-	}
-
-	setGrid( grid ) {
-
-		this.grid = grid;
-
-	}
-
-	addHUD( hud ) {
-
-		this.hud = hud;
-
-	}
-
-	newLayer( name ) {
-
-		const layer = new NodiLayer( name );
-		layer.game = this;
-		this.addLayer( layer );
-		return layer;
-
-	}
-
-	reset() {
-
-		this.point = 0;
-		this.level = 1;
-
-	}
-
-}
-
 function getRandomInt( max ) {
 
 	return Math.floor( Math.random() * max );
@@ -984,4 +955,4 @@ if ( typeof window !== 'undefined' ) {
 
 }
 
-export { NodiGrid, NodiHud, NodiLayer, NodiScene, NodiView, Transformation, Vec2, getRandomInt };
+export { NodiGrid, NodiHud, NodiLayer, NodiView, Transformation, Vec2, getRandomInt };
