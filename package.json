@@ -1,7 +1,7 @@
 {
   "name": "beat_the_ape",
-  "version": "1.0.0",
-  "description": "Simple html canvas for layered maps",
+  "version": "0.4.0",
+  "description": "Simple number game",
   "main": "index.html",
   "devDependencies": {
     "@babel/core": "^7.19.3",
@@ -34,7 +34,7 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nodi-andy/nodi.canvas/issues"
+    "url": "https://github.com/nodi-andy/beat_the_ape/issues"
   },
-  "homepage": "https://github.com/nodi-andy/nodi.canvas#readme"
+  "homepage": "https://github.com/nodi-andy/beat_the_ape#readme"
 }

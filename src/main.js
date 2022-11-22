@@ -15,7 +15,7 @@ class BeatTheApe extends NODICANVAS.NodiView {
     resize() {
         let docRatio = document.documentElement.clientWidth / document.documentElement.clientHeight;
         if (docRatio > this.grid.ratio)
-            this.setScale((document.documentElement.clientHeight * 0.9 ) / this.grid.size.y);
+            this.setScale((document.documentElement.clientHeight - 100 ) / this.grid.size.y);
         else
             this.setScale((document.documentElement.clientWidth * 0.9 ) / this.grid.size.x);
 
@@ -112,6 +112,7 @@ dataLayer.render = function (view) {
     view.ctx.lineWidth = 1;
     view.ctx.font = "0.8px Arial";
     view.ctx.fillStyle = 'black';
+    view.ctx.textAlign = 'center';
     let n = 1;
     if (this.d) {
         for(let item in this.d) {
