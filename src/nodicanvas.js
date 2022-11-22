@@ -379,7 +379,7 @@ class NodiLayer extends Transformation {
 
 	fillText( t, pos ) {
 
-		this.view.ctx.fillText( t, ( pos.x + 0.25 ), ( pos.y + 0.9 ) );
+		this.view.ctx.fillText( t, ( pos.x + 0.5 ), ( pos.y + 0.75 ) );
 
 	}
 
@@ -418,11 +418,11 @@ class NodiHud extends NodiLayer {
 		ctx.font = '20px Arial';
 		ctx.fillStyle = 'black';
 
-		ctx.fillText( 'score: ' + parseInt( this.game.point ), 30, 30 );
+		ctx.fillText( 'score: ' + parseInt( this.game.point ), 100, 30 );
 
 		if ( this.msgText ) {
 
-			ctx.fillText( this.msgText, ( this.game.viewPort.right - ctx.measureText( this.msgText ).width ) / 2, 30 );
+			ctx.fillText( this.msgText, this.game.viewPort.right / 2, 30 );
 
 		}
 
@@ -950,8 +950,5 @@ if ( typeof window !== 'undefined' ) {
 	}
 
 }
-<<<<<<< HEAD
 
 export { NodiGrid, NodiHud, NodiLayer, NodiView, Transformation, Vec2, getRandomInt };
-=======
->>>>>>> 937b6c93e5f67675e453d46d2f0841f4ad043ab3

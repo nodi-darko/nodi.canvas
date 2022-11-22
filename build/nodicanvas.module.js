@@ -2,6 +2,10 @@
             * @license
             * SPDX-License-Identifier: MIT
             */
+/**
+            * @license
+            * SPDX-License-Identifier: MIT
+            */
 // 2D Vector
 
 class Vec2 {
@@ -379,7 +383,7 @@ class NodiLayer extends Transformation {
 
 	fillText( t, pos ) {
 
-		this.view.ctx.fillText( t, ( pos.x + 0.25 ), ( pos.y + 0.9 ) );
+		this.view.ctx.fillText( t, ( pos.x + 0.5 ), ( pos.y + 0.75 ) );
 
 	}
 
@@ -418,11 +422,11 @@ class NodiHud extends NodiLayer {
 		ctx.font = '20px Arial';
 		ctx.fillStyle = 'black';
 
-		ctx.fillText( 'score: ' + parseInt( this.game.point ), 30, 30 );
+		ctx.fillText( 'score: ' + parseInt( this.game.point ), 100, 30 );
 
 		if ( this.msgText ) {
 
-			ctx.fillText( this.msgText, ( this.game.viewPort.right - ctx.measureText( this.msgText ).width ) / 2, 30 );
+			ctx.fillText( this.msgText, this.game.viewPort.right / 2, 30 );
 
 		}
 
@@ -816,6 +820,7 @@ class NodiView extends NodiLayer {
 			return;
 
 		}
+
 
 		this.ctx.setTransform( 1, 0, 0, 1, 0, 0 );
 		this.ctx.clearRect( 0, 0, this.canvas.width, this.canvas.height );
