@@ -10,8 +10,10 @@ class NodiGrid extends NodiLayer {
 		this.lineWidth = lineWidth;
 		this.w = w;
 		this.h = h;
+		this.ratio = this.w / this.h;
 		this.setScale( this.gridSize );
 		this.mid = new Vec2( this.w, this.h ).divide( 2 );
+		this.size = new Vec2( this.w, this.h ).multiply( this.gridSize );
 
 	}
 
