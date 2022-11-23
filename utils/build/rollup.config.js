@@ -272,10 +272,7 @@ function header() {
 
 		renderChunk( code ) {
 
-			return `/**
-            * @license
-            * SPDX-License-Identifier: MIT
-            */
+			return `/** @license SPDX-License-Identifier: MIT */
 ${ code }`;
 
 		}

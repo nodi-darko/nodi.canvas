@@ -1,17 +1,10 @@
-/**
-            * @license
-            * SPDX-License-Identifier: MIT
-            */
+/** @license SPDX-License-Identifier: MIT */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
 	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.nodicanvas = {}));
 })(this, (function (exports) { 'use strict';
 
-	/**
-							* @license
-							* SPDX-License-Identifier: MIT
-							*/
 	// 2D Vector
 
 	class Vec2 {
@@ -139,6 +132,7 @@
 	Vec2.getRandom = function (mx, my) {
 		return new Vec2(Math.getRandomInt(mx), Math.getRandomInt(my));
 	};
+
 	class Transformation {
 		constructor(limits) {
 			this.sx = 1;
@@ -195,6 +189,7 @@
 			this.ty = 0;
 		}
 	}
+
 	class NodiLayer extends Transformation {
 		constructor(name) {
 			super();
@@ -230,6 +225,7 @@
 		}
 		render() {}
 	}
+
 	class NodiHud extends NodiLayer {
 		constructor(game) {
 			super();
@@ -240,9 +236,9 @@
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			ctx.font = '20px Arial';
 			ctx.fillStyle = 'black';
-			ctx.fillText('score: ' + parseInt(this.game.point), 100, 30);
+			ctx.fillText('score: ' + parseInt(this.game.point), 30, 30);
 			if (this.msgText) {
-				ctx.fillText(this.msgText, this.game.viewPort.right / 2, 30);
+				ctx.fillText(this.msgText, (this.game.viewPort.right - ctx.measureText(this.msgText).width) / 2, 30);
 			}
 		}
 		showMsg(msg) {
@@ -253,6 +249,7 @@
 			hud.msgText = undefined;
 		}
 	}
+
 	class NodiGrid extends NodiLayer {
 		constructor(name, gridSize, lineWidth, w, h) {
 			super(name);
@@ -310,6 +307,7 @@
 			view.ctx.stroke();
 		}
 	}
+
 	class NodiView extends NodiLayer {
 		constructor(canvas) {
 			super([10, 0.1]);
@@ -547,6 +545,7 @@
 			}
 		}
 	}
+
 	function getRandomInt(max) {
 		return Math.floor(Math.random() * max);
 	}

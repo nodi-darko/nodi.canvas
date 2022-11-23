@@ -1,15 +1,8 @@
-/**
-            * @license
-            * SPDX-License-Identifier: MIT
-            */
+/** @license SPDX-License-Identifier: MIT */
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-/**
-						* @license
-						* SPDX-License-Identifier: MIT
-						*/
 // 2D Vector
 
 class Vec2 {
@@ -137,6 +130,7 @@ Vec2.distance = function (a, b) {
 Vec2.getRandom = function (mx, my) {
 	return new Vec2(Math.getRandomInt(mx), Math.getRandomInt(my));
 };
+
 class Transformation {
 	constructor(limits) {
 		this.sx = 1;
@@ -193,6 +187,7 @@ class Transformation {
 		this.ty = 0;
 	}
 }
+
 class NodiLayer extends Transformation {
 	constructor(name) {
 		super();
@@ -228,6 +223,7 @@ class NodiLayer extends Transformation {
 	}
 	render() {}
 }
+
 class NodiHud extends NodiLayer {
 	constructor(game) {
 		super();
@@ -238,9 +234,9 @@ class NodiHud extends NodiLayer {
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		ctx.font = '20px Arial';
 		ctx.fillStyle = 'black';
-		ctx.fillText('score: ' + parseInt(this.game.point), 100, 30);
+		ctx.fillText('score: ' + parseInt(this.game.point), 30, 30);
 		if (this.msgText) {
-			ctx.fillText(this.msgText, this.game.viewPort.right / 2, 30);
+			ctx.fillText(this.msgText, (this.game.viewPort.right - ctx.measureText(this.msgText).width) / 2, 30);
 		}
 	}
 	showMsg(msg) {
@@ -251,6 +247,7 @@ class NodiHud extends NodiLayer {
 		hud.msgText = undefined;
 	}
 }
+
 class NodiGrid extends NodiLayer {
 	constructor(name, gridSize, lineWidth, w, h) {
 		super(name);
@@ -308,6 +305,7 @@ class NodiGrid extends NodiLayer {
 		view.ctx.stroke();
 	}
 }
+
 class NodiView extends NodiLayer {
 	constructor(canvas) {
 		super([10, 0.1]);
@@ -545,6 +543,7 @@ class NodiView extends NodiLayer {
 		}
 	}
 }
+
 function getRandomInt(max) {
 	return Math.floor(Math.random() * max);
 }

@@ -1,11 +1,4 @@
-/**
-            * @license
-            * SPDX-License-Identifier: MIT
-            */
-/**
-            * @license
-            * SPDX-License-Identifier: MIT
-            */
+/** @license SPDX-License-Identifier: MIT */
 // 2D Vector
 
 class Vec2 {
@@ -422,11 +415,11 @@ class NodiHud extends NodiLayer {
 		ctx.font = '20px Arial';
 		ctx.fillStyle = 'black';
 
-		ctx.fillText( 'score: ' + parseInt( this.game.point ), 100, 30 );
+		ctx.fillText( 'score: ' + parseInt( this.game.point ), 30, 30 );
 
 		if ( this.msgText ) {
 
-			ctx.fillText( this.msgText, this.game.viewPort.right / 2, 30 );
+			ctx.fillText( this.msgText, ( this.game.viewPort.right - ctx.measureText( this.msgText ).width ) / 2, 30 );
 
 		}
 
@@ -820,7 +813,6 @@ class NodiView extends NodiLayer {
 			return;
 
 		}
-
 
 		this.ctx.setTransform( 1, 0, 0, 1, 0, 0 );
 		this.ctx.clearRect( 0, 0, this.canvas.width, this.canvas.height );
