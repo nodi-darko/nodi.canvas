@@ -22,4 +22,4 @@ test/unit/build
 
 
 **/node_modules
-build/nodicanvas.module.js
+package-lock.json

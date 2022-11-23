@@ -1,7 +1,4 @@
-/**
-            * @license
-            * SPDX-License-Identifier: MIT
-            */
+/** @license SPDX-License-Identifier: MIT */
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -213,7 +210,7 @@ class NodiLayer extends Transformation {
 		this.viewPort.height = this.view.canvas.height * this.scale / this.view.scale;
 	}
 	fillText(t, pos) {
-		this.view.ctx.fillText(t, pos.x + 0.25, pos.y + 0.9);
+		this.view.ctx.fillText(t, pos.x + 0.5, pos.y + 0.75);
 	}
 	onMouseClick() {
 		return false;

@@ -1,7 +1,4 @@
-/**
-            * @license
-            * SPDX-License-Identifier: MIT
-            */
+/** @license SPDX-License-Identifier: MIT */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -215,7 +212,7 @@
 			this.viewPort.height = this.view.canvas.height * this.scale / this.view.scale;
 		}
 		fillText(t, pos) {
-			this.view.ctx.fillText(t, pos.x + 0.25, pos.y + 0.9);
+			this.view.ctx.fillText(t, pos.x + 0.5, pos.y + 0.75);
 		}
 		onMouseClick() {
 			return false;

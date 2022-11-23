@@ -1,13 +1,14 @@
 {
   "name": "beat_the_ape",
   "version": "0.4.0",
-  "description": "Simple number game",
+  "description": "Simple canvas",
   "main": "index.html",
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@babel/eslint-parser": "^7.19.1",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/preset-env": "^7.19.3",
+    "@rollup/plugin-babel": "^5.3.1",
     "chalk": "^5.0.1",
     "concurrently": "^7.4.0",
     "eslint": "^8.24.0",
@@ -23,6 +24,7 @@
   },
   "scripts": {
     "start": "npm run dev",
+    "build": "rollup -c utils/build/rollup.config.js",
     "dev": "concurrently --names \"ROLLUP,HTTP\" -c \"bgBlue.bold,bgGreen.bold\" \"servez -p 8080\""
   },
   "repository": {
@@ -32,7 +34,7 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nodi-andy/beat_the_ape/issues"
+    "url": "https://github.com/nodi-andy/nodi.canvas/issues"
   },
-  "homepage": "https://github.com/nodi-andy/beat_the_ape#readme"
+  "homepage": "https://github.com/nodi-andy/nodi.canvas#readme"
 }
