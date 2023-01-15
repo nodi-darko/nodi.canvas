@@ -1,5 +1,5 @@
 {
-  "name": "beat_the_ape",
+  "name": "nodi.canvas",
   "version": "0.4.0",
   "description": "Simple canvas",
   "main": "index.html",
@@ -25,16 +25,17 @@
   "scripts": {
     "start": "npm run dev",
     "build": "rollup -c utils/build/rollup.config.js",
-    "dev": "concurrently --names \"ROLLUP,HTTP\" -c \"bgBlue.bold,bgGreen.bold\" \"servez -p 8080\""
+    "dev": "concurrently --names \"ROLLUP,HTTP\" -c \"bgBlue.bold,bgGreen.bold\" \"servez -p 8080\"",
+    "restart" : "rollup -c utils/build/rollup.config.js & npm run dev"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nodi-andy/beat_the_ape.git"
+    "url": "git+https://github.com/nodi-andy/nodi.canvas.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nodi-andy/beat_the_ape/issues"
+    "url": "https://github.com/nodi-andy/nodi.canvas/issues"
   },
-  "homepage": "https://github.com/nodi-andy/beat_the_ape#readme"
+  "homepage": "https://github.com/nodi-andy/nodi.canvas#readme"
 }
