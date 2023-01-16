@@ -26,6 +26,8 @@
     "start": "npm run dev",
     "build": "rollup -c utils/build/rollup.config.js",
     "dev": "concurrently --names \"ROLLUP,HTTP\" -c \"bgBlue.bold,bgGreen.bold\" \"servez -p 8090\""
+    "dev": "concurrently --names \"ROLLUP,HTTP\" -c \"bgBlue.bold,bgGreen.bold\" \"servez -p 8080\"",
+    "restart" : "rollup -c utils/build/rollup.config.js & npm run dev"
   },
   "repository": {
     "type": "git",
