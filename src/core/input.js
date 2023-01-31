@@ -37,9 +37,9 @@ class NodiInput {
 		this._keyup_callback = this.onKeyUp.bind( this );
 
 		canvas.addEventListener( 'wheel', this._mousewheel_callback, false )
-		canvas.addEventListener( 'mousedown', this._mousedown_callback, false )
+		//canvas.addEventListener( 'mousedown', this._mousedown_callback, false )
 		canvas.addEventListener( 'pointerdown', this._mousedown_callback, false )
-		canvas.addEventListener( 'mouseup', this._mouseup_callback, false )
+		//canvas.addEventListener( 'mouseup', this._mouseup_callback, false )
 		canvas.addEventListener( 'pointerup', this._mouseup_callback, false )
 		canvas.addEventListener( 'mousemove', this._mousemove_callback, false )
 		canvas.addEventListener( 'pointermove', this._mousemove_callback, false )
