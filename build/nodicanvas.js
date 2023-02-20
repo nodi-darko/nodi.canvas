@@ -253,6 +253,9 @@
 		worldToTile(p) {
 			return this.worldToTileXY(p.x, p.y);
 		}
+		tileToWorld(p) {
+			return new Vec2(Math.floor(p.x * this.tileSize), Math.floor(p.y * this.tileSize));
+		}
 		screenToTile(p) {
 			if (this.view) {
 				let wp = this.view.screenToWorld(p);
@@ -519,9 +522,13 @@
 			this._keydown_callback = this.onKeyDown.bind(this);
 			this._keyup_callback = this.onKeyUp.bind(this);
 			canvas.addEventListener('wheel', this._mousewheel_callback, false);
-			canvas.addEventListener('mousedown', this._mousedown_callback, false);
-			canvas.addEventListener('mouseup', this._mouseup_callback, false);
+			//canvas.addEventListener( 'mousedown', this._mousedown_callback, false )
+			canvas.addEventListener('pointerdown', this._mousedown_callback, false);
+			//canvas.addEventListener( 'mouseup', this._mouseup_callback, false )
+			canvas.addEventListener('pointerup', this._mouseup_callback, false);
 			canvas.addEventListener('mousemove', this._mousemove_callback, false);
+			canvas.addEventListener('pointermove', this._mousemove_callback, false);
+			canvas.addEventListener('touchmove', this._mousemove_callback, false);
 			canvas.addEventListener('DOMMouseScroll', this._mousewheel_callback, false);
 			document.addEventListener('keydown', this._keydown_callback, false);
 			document.addEventListener('keyup', this._keyup_callback, false);

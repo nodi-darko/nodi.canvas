@@ -38,9 +38,11 @@ class NodiGrid extends NodiLayer {
 	}
 
 	worldToTile( p ) {
-
 		return this.worldToTileXY(p.x, p.y);
+	}
 
+	tileToWorld( p ) {
+		return new Vec2( Math.floor( p.x * this.tileSize ), Math.floor( p.y * this.tileSize ) );
 	}
 
 	screenToTile( p ) {
