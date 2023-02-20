@@ -21,7 +21,7 @@ export class NodiLayer extends Transformation {
 	}
 
 	updateViewPort() {
-
+		if (this.canvas == null) return
 		if ( this.view ) {
 			var left = this.tx - ( this.view.tx + this.view.dx );
 			var top = this.ty - ( this.view.ty + this.view.dy );

@@ -202,6 +202,7 @@ class NodiLayer extends Transformation {
 		this.updateViewPort();
 	}
 	updateViewPort() {
+		if (this.canvas == null) return;
 		if (this.view) {
 			var left = this.tx - (this.view.tx + this.view.dx);
 			var top = this.ty - (this.view.ty + this.view.dy);
@@ -293,35 +294,23 @@ class NodiGrid extends NodiLayer {
 
 	/*
 	renderGrid( view ) {
-	
-		view.ctx.strokeStyle = '#555';
+			view.ctx.strokeStyle = '#555';
 		const marginx = this.viewPort.width * 0.1;
 		const marginy = this.viewPort.height * 0.1;
 		let left = 0, top = 0, right, down;
-	
-		if ( this.w == 0 || this.w == undefined ) {
-	
-			left = Math.floor( this.viewPort.x - marginx );
+			if ( this.w == 0 || this.w == undefined ) {
+				left = Math.floor( this.viewPort.x - marginx );
 			right = left + this.viewPort.width + 2 * marginx;
-	
-		} else {
-	
-			right = this.w;
-	
-		}
-	
-		if ( this.h == 0 || this.h == undefined ) {
-	
-			top = Math.floor( this.viewPort.y - marginy );
+			} else {
+				right = this.w;
+			}
+			if ( this.h == 0 || this.h == undefined ) {
+				top = Math.floor( this.viewPort.y - marginy );
 			down = top + this.viewPort.height + 2 * marginy;
-	
-		} else {
-	
-			down = this.h;
-	
-		}
-	
-		view.ctx.shadowColor = 'black';
+			} else {
+				down = this.h;
+			}
+			view.ctx.shadowColor = 'black';
 		view.ctx.shadowBlur = 20;
 		view.ctx.fillStyle = 'rgb(234, 234, 234)';
 		view.ctx.fillRect( left, top, right, down );
@@ -329,24 +318,16 @@ class NodiGrid extends NodiLayer {
 		//console.log("draw grid", grid_area[0]);
 		view.ctx.lineWidth = this.lineWidth;
 		view.ctx.beginPath();
-	
-		for ( var x = left; x <= right; x += 1 ) {
-	
-			view.ctx.moveTo( x, top );
+			for ( var x = left; x <= right; x += 1 ) {
+				view.ctx.moveTo( x, top );
 			view.ctx.lineTo( x, down );
-	
-		}
-	
-		for ( var y = top; y <= down; y += 1 ) {
-	
-			view.ctx.moveTo( left, y );
+			}
+			for ( var y = top; y <= down; y += 1 ) {
+				view.ctx.moveTo( left, y );
 			view.ctx.lineTo( right, y );
-	
-		}
-	
-		view.ctx.stroke();
-	
-	}*/
+			}
+			view.ctx.stroke();
+		}*/
 }
 
 class NodiHud extends NodiGrid {
@@ -462,6 +443,7 @@ class NodiView extends NodiGrid {
 		if (this.hud) this.hud.render();
 	}
 	resize(width, height) {
+		if (this.canvas == null) return;
 		if (this.canvas.width == width && this.canvas.height == height) {
 			return;
 		}
@@ -493,6 +475,7 @@ class NodiView extends NodiGrid {
 		this.ty = y;
 	}
 	focusOn() {
+		if (this.canvas == null) return;
 		var halfScreenSize = Vec2.divide(new Vec2(this.canvas.width, this.canvas.height), 2);
 		const delta = Vec2.subtract(Vec2.multiply(this.center, this.sx), halfScreenSize); //Vec2.subtract( halfScreenSize, this.center );
 

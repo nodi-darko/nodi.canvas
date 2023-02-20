@@ -363,7 +363,7 @@ class NodiLayer extends Transformation {
 	}
 
 	updateViewPort() {
-
+		if (this.canvas == null) return
 		if ( this.view ) {
 			var left = this.tx - ( this.view.tx + this.view.dx );
 			var top = this.ty - ( this.view.ty + this.view.dy );
@@ -750,6 +750,8 @@ class NodiView extends NodiGrid {
 
 	resize( width, height ) {
 
+		if (this.canvas == null) return
+
 		if ( this.canvas.width == width && this.canvas.height == height ) {
 			return;
 		}
@@ -791,6 +793,8 @@ class NodiView extends NodiGrid {
 	}
 
 	focusOn() {
+
+		if (this.canvas == null) return
 		
 		var halfScreenSize = Vec2.divide(new Vec2(this.canvas.width, this.canvas.height), 2);
 

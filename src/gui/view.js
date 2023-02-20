@@ -160,6 +160,8 @@ class NodiView extends NodiGrid {
 
 	resize( width, height ) {
 
+		if (this.canvas == null) return
+
 		if ( this.canvas.width == width && this.canvas.height == height ) {
 			return;
 		}
@@ -201,6 +203,8 @@ class NodiView extends NodiGrid {
 	}
 
 	focusOn() {
+
+		if (this.canvas == null) return
 		
 		var halfScreenSize = Vec2.divide(new Vec2(this.canvas.width, this.canvas.height), 2);
 
