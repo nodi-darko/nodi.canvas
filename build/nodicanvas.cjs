@@ -379,6 +379,7 @@ class NodiView extends NodiGrid {
 		} else {
 			this.stopRendering();
 			this.input = null;
+			this.canvas = null;
 		}
 		this.ctx = this.canvas?.getContext('2d');
 	}
