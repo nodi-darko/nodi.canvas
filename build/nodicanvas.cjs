@@ -368,16 +368,19 @@ class NodiView extends NodiGrid {
 		this.pointerDown = false;
 		this.pointerIsDouble = false;
 		this.viewPort = new DOMRect();
-		this.startRendering();
 		this.center = new Vec2(0, 0);
-		this.input = new NodiInput(this);
 	}
 	setCanvas(canvas) {
-		if (!canvas || canvas === this.canvas) {
-			return;
+		if (canvas === this.canvas) return;
+		if (canvas) {
+			this.startRendering();
+			this.canvas = canvas;
+			this.input = new NodiInput(this);
+		} else {
+			this.stopRendering();
+			this.input = null;
 		}
-		this.canvas = canvas;
-		this.ctx = this.canvas.getContext('2d');
+		this.ctx = this.canvas?.getContext('2d');
 	}
 	getCanvasWindow() {
 		if (!this.canvas) {
@@ -387,9 +390,7 @@ class NodiView extends NodiGrid {
 		return doc.defaultView || doc.parentWindow;
 	}
 	startRendering() {
-		if (this.isRendering) {
-			return;
-		} //already rendering
+		if (this.isRendering) return; //already rendering
 
 		this.isRendering = true;
 		renderFrame.call(this);

@@ -9,7 +9,6 @@ class NodiView extends NodiGrid {
 		super( "view", gridSize, tileSize );
 		this.layers = {};
 		this.layerOrder = []
-
 		this.dragable = false;
 
 		this.setCanvas( canvas );
@@ -19,11 +18,7 @@ class NodiView extends NodiGrid {
 		this.pointerIsDouble = false;
 		this.viewPort = new DOMRect();
 
-
 		this.center = new Vec2( 0, 0 );
-
-
-
 	}
 
 	setCanvas( canvas ) {
