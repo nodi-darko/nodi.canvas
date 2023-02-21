@@ -14,19 +14,6 @@ class NodiInput {
 		this.mouseStartCanvas = new Vec2( 0, 0 );
 		this.mouseCurrentCanvas = new Vec2( 0, 0 );
 
-	}
-
-	setView( view ) {
-
-		if ( ! view || view === this.view ) {
-
-			return;
-
-		}
-
-		this.view = view;
-		this.canvas = view.canvas;
-
 		this._mousedown_callback = this.onMouseDown.bind( this );
 		this._mousewheel_callback = this.onMouseWheel.bind( this );
 		
@@ -36,10 +23,27 @@ class NodiInput {
 		this._keydown_callback = this.onKeyDown.bind( this );
 		this._keyup_callback = this.onKeyUp.bind( this );
 
+	}
+
+	setView( view ) {
+		if (view === this.view ) return;
+
+		if ( view == null) {
+			this.removeEvents()
+			return
+		}
+		
+		this.view = view;
+		this.canvas = view.canvas;
+		this.addEvents();
+	}
+
+	addEvents() {
+		if (this.canvas == null) return
+		this.removeEvents()
+		
 		this.canvas.addEventListener( 'wheel', this._mousewheel_callback, false )
-		//canvas.addEventListener( 'mousedown', this._mousedown_callback, false )
 		this.canvas.addEventListener( 'pointerdown', this._mousedown_callback, false )
-		//canvas.addEventListener( 'mouseup', this._mouseup_callback, false )
 		this.canvas.addEventListener( 'pointerup', this._mouseup_callback, false )
 		this.canvas.addEventListener( 'mousemove', this._mousemove_callback, false )
 		this.canvas.addEventListener( 'pointermove', this._mousemove_callback, false )
@@ -49,7 +53,21 @@ class NodiInput {
 		document.addEventListener( 'keyup', this._keyup_callback, false)
 
 		this._events_binded = true;
+	}
 
+	removeEvents() {
+		if (this.canvas == null) return
+    	this.canvas.removeEventListener( 'wheel', this._mousewheel_callback )
+		this.canvas.removeEventListener( 'pointerdown', this._mousedown_callback )
+		this.canvas.removeEventListener( 'pointerup', this._mouseup_callback )
+		this.canvas.removeEventListener( 'mousemove', this._mousemove_callback )
+		this.canvas.removeEventListener( 'pointermove', this._mousemove_callback )
+		this.canvas.removeEventListener( 'touchmove', this._mousemove_callback )
+		this.canvas.removeEventListener( 'DOMMouseScroll', this._mousewheel_callback )
+		document.removeEventListener( 'keydown', this._keydown_callback)
+		document.removeEventListener( 'keyup', this._keyup_callback)
+
+		this._events_binded = false;
 	}
 
 	onKeyDown( e ) {

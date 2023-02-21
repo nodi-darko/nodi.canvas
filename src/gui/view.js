@@ -10,27 +10,24 @@ class NodiView extends NodiGrid {
 		this.layers = {};
 		this.layerOrder = []
 		this.dragable = false;
-
-		this.setCanvas( canvas );
-
 		this.draggingCanvas = false;
 		this.pointerDown = false;
 		this.pointerIsDouble = false;
-		this.viewPort = new DOMRect();
-
 		this.center = new Vec2( 0, 0 );
+		this.viewPort = new DOMRect();
+		this.canvas = canvas
+
+		this.input = new NodiInput(this);
 	}
 
 	setCanvas( canvas ) {
-		if ( canvas === this.canvas ) return
-
 		if (canvas) {
 			this.startRendering();
+			this.input.addEvents();
 			this.canvas = canvas;
-			this.input = new NodiInput(this);
 		} else {
 			this.stopRendering()
-			this.input = null
+			this.input.removeEvents();
 			this.canvas = null
 		}
 

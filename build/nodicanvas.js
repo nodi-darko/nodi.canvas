@@ -365,22 +365,22 @@
 			this.layers = {};
 			this.layerOrder = [];
 			this.dragable = false;
-			this.setCanvas(canvas);
 			this.draggingCanvas = false;
 			this.pointerDown = false;
 			this.pointerIsDouble = false;
-			this.viewPort = new DOMRect();
 			this.center = new Vec2(0, 0);
+			this.viewPort = new DOMRect();
+			this.canvas = canvas;
+			this.input = new NodiInput(this);
 		}
 		setCanvas(canvas) {
-			if (canvas === this.canvas) return;
 			if (canvas) {
 				this.startRendering();
+				this.input.addEvents();
 				this.canvas = canvas;
-				this.input = new NodiInput(this);
 			} else {
 				this.stopRendering();
-				this.input = null;
+				this.input.removeEvents();
 				this.canvas = null;
 			}
 			this.ctx = this.canvas?.getContext('2d');
@@ -510,23 +510,28 @@
 			this.pointerIsDouble = false;
 			this.mouseStartCanvas = new Vec2(0, 0);
 			this.mouseCurrentCanvas = new Vec2(0, 0);
-		}
-		setView(view) {
-			if (!view || view === this.view) {
-				return;
-			}
-			this.view = view;
-			this.canvas = view.canvas;
 			this._mousedown_callback = this.onMouseDown.bind(this);
 			this._mousewheel_callback = this.onMouseWheel.bind(this);
 			this._mousemove_callback = this.onMouseMove.bind(this);
 			this._mouseup_callback = this.onMouseUp.bind(this);
 			this._keydown_callback = this.onKeyDown.bind(this);
 			this._keyup_callback = this.onKeyUp.bind(this);
+		}
+		setView(view) {
+			if (view === this.view) return;
+			if (view == null) {
+				this.removeEvents();
+				return;
+			}
+			this.view = view;
+			this.canvas = view.canvas;
+			this.addEvents();
+		}
+		addEvents() {
+			if (this.canvas == null) return;
+			this.removeEvents();
 			this.canvas.addEventListener('wheel', this._mousewheel_callback, false);
-			//canvas.addEventListener( 'mousedown', this._mousedown_callback, false )
 			this.canvas.addEventListener('pointerdown', this._mousedown_callback, false);
-			//canvas.addEventListener( 'mouseup', this._mouseup_callback, false )
 			this.canvas.addEventListener('pointerup', this._mouseup_callback, false);
 			this.canvas.addEventListener('mousemove', this._mousemove_callback, false);
 			this.canvas.addEventListener('pointermove', this._mousemove_callback, false);
@@ -535,6 +540,19 @@
 			document.addEventListener('keydown', this._keydown_callback, false);
 			document.addEventListener('keyup', this._keyup_callback, false);
 			this._events_binded = true;
+		}
+		removeEvents() {
+			if (this.canvas == null) return;
+			this.canvas.removeEventListener('wheel', this._mousewheel_callback);
+			this.canvas.removeEventListener('pointerdown', this._mousedown_callback);
+			this.canvas.removeEventListener('pointerup', this._mouseup_callback);
+			this.canvas.removeEventListener('mousemove', this._mousemove_callback);
+			this.canvas.removeEventListener('pointermove', this._mousemove_callback);
+			this.canvas.removeEventListener('touchmove', this._mousemove_callback);
+			this.canvas.removeEventListener('DOMMouseScroll', this._mousewheel_callback);
+			document.removeEventListener('keydown', this._keydown_callback);
+			document.removeEventListener('keyup', this._keyup_callback);
+			this._events_binded = false;
 		}
 		onKeyDown(e) {
 			for (const layerName in this.view.layers) {
