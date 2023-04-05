@@ -1,5 +1,5 @@
-import { Vec2 } from '../core/vec2.js';
-import { NodiLayer } from './layer.js';
+import { Vec2 } from './core/vec2.js';
+import { NodiLayer } from './gui/layer.js';
 
 class NodiGrid extends NodiLayer {
 

@@ -3,6 +3,7 @@
   "version": "0.4.0",
   "description": "Simple canvas",
   "main": "index.html",
+  "type": "module",
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@babel/eslint-parser": "^7.19.1",
@@ -23,10 +24,11 @@
     "servez": "^1.14.1"
   },
   "scripts": {
-    "start": "npm run dev",
+    "start": "node index.js",
+    "start-dev": "npm run dev",
     "build": "rollup -c utils/build/rollup.config.js",
     "dev": "concurrently --names \"ROLLUP,HTTP\" -c \"bgBlue.bold,bgGreen.bold\" \"servez -p 8080\"",
-    "restart" : "rollup -c utils/build/rollup.config.js & npm run dev"
+    "restart": "rollup -c utils/build/rollup.config.js & npm run dev"
   },
   "repository": {
     "type": "git",

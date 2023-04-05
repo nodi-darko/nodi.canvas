@@ -1,18 +1,23 @@
-import { Transformation } from '../core/transformation.js';
 
-export class NodiLayer extends Transformation {
+export default class NodiLayer {
 
-	constructor( name, zIndex ) {
+	constructor( game, name, zIndex ) {
 
-		super();
 		this.name = name;
-		this.viewPort = new DOMRect( 4 );
+		//this.viewPort = new THREE.Box( 4 );
 		this.pointerevents_method = 'mouse';
 		this.visible = true;
 		this.zIndex = zIndex;
+	}
+
+	init (game) {
 
 	}
 
+	update(currentFrame) {
+		
+	}
+/*
 	attachView( view ) {
 
 		this.view = view;
@@ -44,6 +49,6 @@ export class NodiLayer extends Transformation {
 
 		this.view.ctx.fillText( t, ( pos.x + 0.5 ), ( pos.y + 0.75 ) );
 
-	}
+	}*/
 
 }

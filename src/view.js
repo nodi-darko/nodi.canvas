@@ -1,12 +1,14 @@
-import { Vec2 } from '../core/vec2.js';
+/*import { Vec2 } from '../core/vec2.js';
 import { NodiInput } from '../nodicanvas.js';
 import { NodiGrid } from './grid.js';
+*/
 
-class NodiView extends NodiGrid {
+export default class NodiView {
 
-	constructor( canvas, gridSize, tileSize ) {
-
-		super( "view", gridSize, tileSize );
+	constructor(THREE, canvasID, gridSize, tileSize ) {
+		this.three = THREE;
+		
+		/*super( "view", gridSize, tileSize );
 		this.layers = {};
 		this.layerOrder = []
 		this.dragable = false;
@@ -14,12 +16,24 @@ class NodiView extends NodiGrid {
 		this.pointerDown = false;
 		this.pointerIsDouble = false;
 		this.center = new Vec2( 0, 0 );
-		this.viewPort = new DOMRect();
-		this.canvas = canvas
-
+		this.viewPort = new DOMRect();*/
+		this.canvas = document.getElementById(canvasID)
+		this.renderer = new this.three.WebGLRenderer({ canvas: this.canvas });
+		this.renderer.setClearColor(0xffffff, 1.0);
+		this.renderer.setPixelRatio(window.devicePixelRatio);
+		this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight);
+		      
+		this.scene = new this.three.Scene();
+    
+  
+		this.camera = new this.three.OrthographicCamera( this.canvas.offsetWidth / - 200, this.canvas.offsetWidth / 200, this.canvas.offsetHeight / 200, this.canvas.offsetHeight / - 200, -10, 100 );
+		this.camera.position.set(0, 0, 1);
+		this.camera.lookAt(this.scene.position);
+/*
 		this.input = new NodiInput(this);
+		*/
 	}
-
+/*
 	setCanvas( canvas ) {
 		if (canvas) {
 			this.startRendering();
@@ -223,8 +237,6 @@ class NodiView extends NodiGrid {
 
 		}
 
-	}
+	}*/
 
 }
-
-export { NodiView };

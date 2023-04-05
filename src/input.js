@@ -1,11 +1,21 @@
-import { Vec2 } from './vec2.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.151.3/examples/jsm/controls/OrbitControls.js';
 
-class NodiInput {
+export default class NodiInput {
 
-	constructor( view ) {
+	constructor( game ) {
 
+		this.control = new OrbitControls(game.view.camera, game.view.renderer.domElement);
+		this.control.mouseButtons.LEFT = game.view.three.MOUSE.PAN
+		this.control.touches = {
+		  ONE: game.view.three.TOUCH.PAN,
+		  TWO: game.view.three.TOUCH.DOLLY_PAN
+		}
+		this.control.minDistance = 0.1;
+		this.control.maxDistance = 100;
+  
+/*
 		this.dragable = false;
-		this.setView( view );
+		this.setView( game );
 
 		this.draggingCanvas = false;
 		this.pointerDown = false;
@@ -22,19 +32,24 @@ class NodiInput {
 		
 		this._keydown_callback = this.onKeyDown.bind( this );
 		this._keyup_callback = this.onKeyUp.bind( this );
-
+*/
 	}
 
-	setView( view ) {
-		if (view === this.view ) return;
+	update() {
+		this.control.update();
+    }
 
-		if ( view == null) {
+/*
+	setView( game ) {
+		if (game === this.game ) return;
+
+		if ( game == null) {
 			this.removeEvents()
 			return
 		}
 		
-		this.view = view;
-		this.canvas = view.canvas;
+		this.game = game;
+		this.canvas = game.canvas;
 		this.addEvents();
 	}
 
@@ -71,15 +86,15 @@ class NodiInput {
 	}
 
 	onKeyDown( e ) {
-		for ( const layerName in this.view.layers ) {
-			let layer = this.view.layers[layerName];
+		for ( const layerName in this.game.layers ) {
+			let layer = this.game.layers[layerName];
 			if (layer?.onKeyDown) layer.onKeyDown(e)
 		}
 	}
 
 	onKeyUp( e ) {
-		for ( const layerName in this.view.layers ) {
-			let layer = this.view.layers[layerName];
+		for ( const layerName in this.game.layers ) {
+			let layer = this.game.layers[layerName];
 			if (layer?.onKeyUp) layer.onKeyUp(e)
 		}
 	}
@@ -87,43 +102,13 @@ class NodiInput {
 	onMouseDown( e ) {
 
 		let hit = false;
-		let layers = Object.keys(this.view.layers).reverse();
+		let layers = Object.keys(this.game.layers).reverse();
 		for ( const layerName of layers ) {
-			const layer = this.view.layers[ layerName ];
+			const layer = this.game.layers[ layerName ];
 			layer.extendMouseData( e );
 			if (layer?.onMouseDown) {
 				hit = hit || layer.onMouseDown( e, hit );
 			}
-
-		}
-
-		if ( hit == false ) {
-
-			var is_primary = e.isPrimary === undefined || ! e.isPrimary;
-			this.mouseStartCanvas = new Vec2( e.canvasX, e.canvasY );
-			this.mouseCurrentCanvas = this.mouseStartCanvas.clone();
-
-			if ( this.pointerDown && is_primary ) {
-
-				this.pointerIsDouble = true;
-
-			} else {
-
-				this.pointerIsDouble = false;
-
-			}
-
-			this.pointerDown = true;
-			this.canvas.focus();
-
-			//left button mouse / single finger
-			if ( e.which == 1 && ! this.pointerIsDouble && this.dragable ) {
-
-				this.draggingCanvas = true;
-
-			}
-
-			this.isMouseDown = true;
 
 		}
 
@@ -132,28 +117,15 @@ class NodiInput {
 	onMouseMove( e ) {
 
 		let hit = false;
-		let layers = Object.keys(this.view.layers).reverse();
+		let layers = Object.keys(this.game.layers).reverse();
 		for ( const layerName of layers ) {
-			const layer = this.view.layers[ layerName ];
+			const layer = this.game.layers[ layerName ];
 			layer.extendMouseData( e );
 			this.mouseCurrentCanvas.x = e.canvasX;
 			this.mouseCurrentCanvas.y = e.canvasY;
 			if (layer?.onMouseMove) {
 				hit = hit || layer.onMouseMove( e, hit );
 			}
-
-		}
-
-		var delta = this.mouseCurrentCanvas.subtract( this.mouseStartCanvas );
-
-		e.dragging = this.isMouseDown;
-
-		if ( this.draggingCanvas ) {
-
-			//console.log("pointerevents: processMouseMove is dragging_canvas", delta.x, delta.y, this.scale);
-			this.dx = delta.x * this.scale;
-			this.dy = delta.y * this.scale;
-			this.updateViewRect();
 
 		}
 
@@ -168,9 +140,9 @@ class NodiInput {
 		e.preventDefault();
 		let hit = false;
 
-		let layers = Object.keys(this.view.layers).reverse();
+		let layers = Object.keys(this.game.layers).reverse();
 		for ( const layerName of layers ) {
-			const layer = this.view.layers[layerName];
+			const layer = this.game.layers[layerName];
 			layer.extendMouseData( e );
 			layer.mouseCurrentCanvas = new Vec2(e.canvasX, e.canvasY);
 			var delta = layer.mouseCurrentCanvas.subtract( this.mouseStartCanvas );
@@ -181,37 +153,6 @@ class NodiInput {
 
 		}
 
-		if ( hit == false && this.draggingCanvas ) {
-
-			var isPrimary = e.isPrimary === undefined || e.isPrimary;
-			this.node_mouse_down = null;
-
-			if ( ! isPrimary ) {
-
-				return false;
-
-			}
-
-
-			this.tx += delta.x * this.scale;
-			this.ty += delta.y * this.scale;
-			this.dx = 0;
-			this.dy = 0;
-			this.isMouseDown = false;
-			this.last_click_position = null;
-
-			this.draggingCanvas = false;
-
-			if ( isPrimary ) {
-
-				this.pointerDown = false;
-				this.pointerIsDouble = false;
-
-			}
-
-			this.last_mouse = this.mouseCurrentCanvas;
-
-		}
 
 		return false;
 
@@ -223,27 +164,12 @@ class NodiInput {
 
 		//this.extendMouseData( e );
 
-		var scale = this.view.scale;
-
-		if ( delta > 0 ) {
-
-			scale *= 1.1;
-
-		} else if ( delta < 0 ) {
-
-			scale *= 1 / 1.1;
-
-		}
-
-		this.view.setScale( scale );
 
 
 		e.preventDefault();
-		this.view.focusOn();
+
 		return false;
 
-	}
+	}*/
 
 }
-
-export { NodiInput };

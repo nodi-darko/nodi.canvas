@@ -1,0 +1,214 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script type="importmap">
+        {
+          "imports": { 
+            "three": "https://unpkg.com/three@0.151.3/build/three.module.js"
+           }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        import NodiView from './view.js';
+        import NodiInput from './input.js';
+        import NodiLayer from './layer.js';
+        import { OrbitControls } from 'https://unpkg.com/three@0.151.3/examples/jsm/controls/OrbitControls.js';
+    
+		window.canvas = document.getElementById("myCanvas")
+        window.canvas.width  = window.innerWidth
+        window.canvas.height = window.innerHeight
+        window.canvas.oncontextmenu = function (e) {e.preventDefault();}
+
+    try {
+        // create view
+        let game = {layers:[]}
+        game.view = new NodiView(THREE, "myCanvas");
+        game.input = new NodiInput(game);
+
+        game.layers.push(new NodiLayer(game, "terrain"));
+  
+        game.layers[0].init = (game) => {
+            const numRows = 1;
+            const numCols = 4;
+            const texture = new game.view.three.TextureLoader().load( 'https://raw.githubusercontent.com/nodi-andy/browser-factory/main/src/res/coal_ore/coal_ore.png');
+            texture.wrapS = game.view.three.RepeatWrapping;
+            texture.wrapT = game.view.three.RepeatWrapping;
+            texture.repeat.set(1 / numCols, 1 / numRows);
+
+            game.layers[0].material1 = new game.view.three.SpriteMaterial( { map: texture } );
+            game.layers[0].material1.map.offset.x = 0;
+            game.layers[0].sprite1 = new game.view.three.Sprite( game.layers[0].material1);
+            game.layers[0].sprite1.position.set(0.5, 1)
+            game.view.scene.add( game.layers[0].sprite1 );
+
+            game.layers[0].material2 = new game.view.three.SpriteMaterial( { map: texture } );
+            game.layers[0].material2.map.offset.x = 0.4;
+            game.layers[0].material2.map.needUpdate = true;
+            game.layers[0].sprite2 = new game.view.three.Sprite( game.layers[0].material2);
+            game.layers[0].sprite2.position.set(0.5, -1)
+            game.view.scene.add( game.layers[0].sprite2 );
+        }
+
+        game.layers[0].update = (currentFrame) => {
+        }
+
+        game.layers.push(new NodiLayer(game, "data"));
+  
+        game.layers[1].init = (game) => {
+            const numRows = 8;
+            const numCols = 32;
+            const map = new game.view.three.TextureLoader().load( 'https://raw.githubusercontent.com/nodi-andy/browser-factory/main/src/entity/player/player.png' );
+            map.wrapS = game.view.three.RepeatWrapping;
+            map.wrapT = game.view.three.RepeatWrapping;
+            map.repeat.set(1 / numCols, 1 / numRows);
+    
+            game.layers[1].material = new game.view.three.SpriteMaterial( { map: map } );
+            game.layers[1].sprite = new game.view.three.Sprite( game.layers[1].material);
+            game.layers[1].sprite.scale.set(1, 2, 1);
+            game.view.scene.add( game.layers[1].sprite );
+        }
+
+        game.layers[1].update = (currentFrame) => {
+            const col = Math.floor(currentFrame % 30);
+            game.layers[1].material.map.offset.set(-col / 30 + 0.005, 1/8);
+        }
+
+
+        /*dataLayer.render = function (view) {
+            view.ctx.lineWidth = 1;
+            view.ctx.font = "0.8px Arial";
+            view.ctx.fillStyle = 'black';
+            view.ctx.textAlign = 'center';
+            if (this.d) {
+                for(let item in this.d) {
+                    this.fillText(this.d[item].number, this.d[item]);
+                }
+            }
+        }*/
+
+
+        game.layers.forEach(element => {
+            element.init(game)
+        }); 
+        game.view.renderer.setAnimationLoop(() => {
+        const time = performance.now() / 32;
+        game.input.update();
+        game.layers.forEach(element => {
+            element.update(time)
+        }); 
+        game.view.renderer.render(game.view.scene, game.view.camera);
+      });
+    } catch (error) {
+       document.getElementById("showError").innerHTML = error + " " + error.lineNumber;
+    // Expected output: ReferenceError: nonExistentFunction is not defined
+    // (Note: the exact output may be browser-dependent)
+    }
+
+
+/* import { BeatTheApe } from './src/main.js'
+        import * as NC from 'nodicanvas';
+
+
+        // add custom layer
+        let dataLayer = game.newLayer("data", new NC.Vec2(8, 8), 1, 0.1 );
+        dataLayer.gridVisible = true;
+
+
+
+        dataLayer.onMouseClick = function (e) {
+            let itemID = e.gridY * this.gridSize.x + e.gridX;
+            if (this.d === null) return;
+            let item = this.d[itemID]
+
+            if (game.state == "init") {
+                if ( item?.number === 1 && game.nextNum === 1) {
+                    for(let id in this.d) {
+                        let item = this.d[id];
+                        if (item.number !== 1) {
+                            item.visible = false;
+                        }
+                    }
+                    game.start();
+                }
+            }
+
+            if (game.state == "running") {
+                if (item?.number === game.nextNum && game.nextNum > 1) {
+                    item.visible = true;
+                    game.nextNum++;
+                    game.point++;
+                    if (game.maxPoint < game.point) game.maxPoint = game.point;
+
+                    if (game.nextNum == game.level +1) {
+
+                        game.startNextLevel();
+                        return;
+                    }
+                }
+                else if (game.nextNum < item?.number) {
+                    game.point -= game.nextNum;
+                    game.reset();
+                    game.startNextLevel();
+                    return;
+                }
+            }
+            console.log(this.d[itemID]?.number);
+        }
+
+        // add custom layer
+        let coverLayer = game.newLayer("cover");
+
+        coverLayer.render = function (game) {
+            let ctx = game.ctx;
+            ctx.lineWidth = 1;
+            ctx.fillStyle = 'gray';
+            let data = game.layers["data"].d;
+            if (data) {
+                ctx.beginPath();
+                for(let id in data) {
+                    let item = data[id];
+                    if (item.visible === false) {
+                        ctx.fillRect(item.x, item.y, 1, 1);
+                    }
+                }
+                ctx.stroke();
+            }
+        }
+
+
+        game.addLayer(game.hud);
+
+        game.hud.render = function (game) {
+            const ctx = this.view.ctx;
+            ctx.setTransform( 1, 0, 0, 1, 0, 0 );
+            ctx.font = '20px Arial';
+            ctx.fillStyle = 'black';
+
+            ctx.fillText( 'Score: ' + parseInt( this.view.point ), 60, 30 );
+            ctx.fillText( 'Max Score: ' + parseInt( this.view.maxPoint ), 60, 60 );
+
+            if ( this.msgText ) {
+
+                ctx.fillText( this.msgText, ( this.view.viewPort.width  ) / 2, 30 );
+
+            }
+        }
+
+        // redraw after resize event
+        window.view = game;
+        window.addEventListener("resize", function() { window.view.resize(); } );
+        window.addEventListener("load", function() { window.view.resize(); } );
+
+        window.view.resize();
+        game.startNextLevel();*/
+    </script>
+  </head>
+
+  <body>
+    <div id="showError">ER</div>
+    <canvas id="myCanvas" style="width: 100%; height: 100%"></canvas>
+  </body>
+
+</html>
+       
